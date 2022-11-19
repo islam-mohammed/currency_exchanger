@@ -10,7 +10,7 @@
       role="combobox"
       aria-controls="options"
       aria-expanded="false"
-      (click)="toggleDropDown()"
+      (click)="showDropDown = !showDropDown"
     >
       <div *ngIf="selectedItem" class="flex items-center">
         <img

@@ -46,10 +46,6 @@ export class SelectComponent implements OnInit {
     this.selectedItem = this.findItemByValue(value);
     console.log(this.selectedItem);
   }
-  toggleDropDown() {
-    this.showDropDown = !this.showDropDown;
-  }
-
   findItemByValue(value: string) {
     return (
       (this.selectedItem = this.listItems.find(
