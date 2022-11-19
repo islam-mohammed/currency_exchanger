@@ -1,31 +1,29 @@
-<header class="bg-indigo-600 sticky top-0">
-  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Top">
-    <div
-      class="w-full py-6 flex items-center justify-between border-b border-indigo-500 lg:border-none"
-    >
-      <div class="flex items-center">
+<header class="header">
+  <nav class="header-nav" aria-label="Top">
+    <div class="header-nav--container">
+      <div class="header-nav--container_logo">
         <a href="#">
-          <span class="sr-only">Currency Exchanger</span>
+          <span class="header-nav--container_logo-sr">Currency Exchanger</span>
           <img
-            class="h-10 w-auto"
+            class="header-nav--container_logo-img"
             src="assets/logo.svg"
             alt="Currency Exchanger"
           />
         </a>
       </div>
-      <div class="ml-10 space-x-4">
+      <div class="header-nav--container_buttons">
         <a
           [routerLink]="['/details']"
           [queryParams]="{ from: 'eur', to: 'usd' }"
           routerLinkActive="active"
-          class="inline-block bg-white py-2 px-4 border border-transparent rounded-md text-base font-medium text-indigo-600 hover:bg-indigo-50"
+          class="link"
           >EUR-USD Details</a
         >
         <a
           [routerLink]="['/details']"
           [queryParams]="{ from: 'eur', to: 'gbp' }"
           routerLinkActive="active"
-          class="inline-block bg-white py-2 px-4 border border-transparent rounded-md text-base font-medium text-indigo-600 hover:bg-indigo-50"
+          class="link"
           >EUR-GPB Details</a
         >
       </div>

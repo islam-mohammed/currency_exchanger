@@ -2,3 +2,48 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+:root {
+  --primary: #264653;
+  --primary-contrast: #ffffff;
+  --primary-shade: #213e49;
+  --primary-tint: #3c5964;
+
+  --secondary: #2a9d8f;
+  --secondary-contrast: #ffffff;
+  --secondary-shade: #258a7e;
+  --secondary-tint: #3fa79a;
+
+  --tertiary: #e9c46a;
+  --tertiary-contrast: #000000;
+  --tertiary-shade: #cdac5d;
+  --tertiary-tint: #ebca79;
+
+  --success: #2dd36f;
+  --success-contrast: #000000;
+  --success-shade: #28ba62;
+  --success-tint: #42d77d;
+
+  --warning: #ffc409;
+  --warning-contrast: #000000;
+  --warning-shade: #e0ac08;
+  --warning-tint: #ffca22;
+
+  --danger: #eb445a;
+  --danger-contrast: #ffffff;
+  --danger-shade: #cf3c4f;
+  --danger-tint: #ed576b;
+
+  --medium: #f4a261;
+  --medium-contrast: #000000;
+  --medium-shade: #d78f55;
+  --medium-tint: #f5ab71;
+
+  --light: #f4f5f8;
+  --light-contrast: #000000;
+  --light-shade: #d7d8da;
+  --light-tint: #f5f6f9;
+}
+label {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
