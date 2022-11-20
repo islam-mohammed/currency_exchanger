@@ -1,0 +1,18 @@
+@import "../assets/responsive.mixin.scss";
+.container {
+  padding: 20px;
+  max-width: 540px;
+  background-color: var(--primary-contrast);
+  margin: 20px auto;
+  border-radius: 0.875rem;
+  @include screen("md") {
+    max-width: 720px;
+    padding: 50px;
+    margin: 20px auto;
+  }
+  @include screen("lg") {
+    max-width: 1140px;
+    padding: 50px;
+    margin: 30px auto;
+  }
+}
