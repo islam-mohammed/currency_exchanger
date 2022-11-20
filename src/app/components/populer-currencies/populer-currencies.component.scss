@@ -2,8 +2,9 @@
 
 .populer {
   width: 100%;
-  &-title {
-    margin-bottom: 4rem;
+  hr {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
   }
   &-list {
     display: grid;
