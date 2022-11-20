@@ -25,11 +25,11 @@ export class SelectComponent implements OnInit {
   @Input() label: string = '';
   @Input() listItems: ListItem[] = [];
   @Input() set value(value: string) {
-    this.selectedItem = this.findItemByValue(value.toUpperCase());
+    this.selectedItem = this.findItemByValue(value);
   }
   @Input() set exclude(value: string) {
     this.localListItems = [
-      ...this.listItems.filter((item) => item.value !== value.toUpperCase()),
+      ...this.listItems.filter((item) => item.value !== value),
     ];
   }
 
@@ -50,7 +50,7 @@ export class SelectComponent implements OnInit {
   onItemSelect(value: string) {
     this.itemSelect.emit(value);
     this.showDropDown = false;
-    this.selectedItem = this.findItemByValue(value.toUpperCase());
+    this.selectedItem = this.findItemByValue(value);
   }
   findItemByValue(value: string) {
     return (
