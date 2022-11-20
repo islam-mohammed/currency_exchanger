@@ -5,8 +5,10 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
 } from '@angular/core';
 
 @Component({
@@ -14,7 +16,12 @@ import {
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
 })
-export class SelectComponent implements OnInit {
+export class SelectComponent implements OnInit, OnChanges {
+  localListItems: ListItem[] = [];
+  initilaized = false;
+  selectedItem: ListItem | undefined;
+  showDropDown = false;
+
   @HostListener('document:click', ['$event'])
   clickout(event: Event) {
     if (!this.eRef.nativeElement.contains(event.target)) {
@@ -25,23 +32,28 @@ export class SelectComponent implements OnInit {
   @Input() showValueOnly = false;
   @Input() label: string = '';
   @Input() listItems: ListItem[] = [];
-  @Input() set value(value: string) {
-    this.selectedItem = this.findItemByValue(value);
-  }
-  @Input() set exclude(value: string) {
-    this.localListItems = [
-      ...this.listItems.filter((item) => item.value !== value),
-    ];
-  }
+  @Input() value = '';
+  @Input() exclude = '';
 
   @Output() itemSelect = new EventEmitter<string>();
-  selectedItem: ListItem | undefined = undefined;
-  showDropDown = false;
-  localListItems: ListItem[] = [];
 
   constructor(private eRef: ElementRef) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.initilaized) this.initComponentData();
+  }
+
   ngOnInit(): void {
-    this.localListItems = [...this.listItems];
+    this.initComponentData();
+  }
+
+  initComponentData() {
+    this.localListItems = [
+      ...this.listItems.filter((item) => item.value !== this.exclude),
+    ];
+    this.selectedItem = this.findItemByValue(this.value);
+    console.log(this.selectedItem);
+    this.initilaized = true;
   }
 
   itemTrackBy(index: number, item: ListItem) {
@@ -54,10 +66,6 @@ export class SelectComponent implements OnInit {
     this.selectedItem = this.findItemByValue(value);
   }
   findItemByValue(value: string) {
-    return (
-      (this.selectedItem = this.listItems.find(
-        (item) => item.value === value
-      )) || undefined
-    );
+    return this.listItems.find((item) => item.value === value);
   }
 }

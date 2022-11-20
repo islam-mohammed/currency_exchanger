@@ -1,5 +1,5 @@
 import { CurrencyExchangeService } from './../../services/currency-exchange.service';
-import { Observable, take } from 'rxjs';
+import { filter, Observable, take } from 'rxjs';
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { CurrencyExchangeRate, ListItem } from '@app/models/frontend-models';
 import { WindowService } from '@app/services/window.service';
@@ -20,7 +20,7 @@ export class ExchangerComponent implements OnInit {
 
   isDeskTop = true;
 
-  $symbols: Observable<ListItem[]> | undefined;
+  currencies$: Observable<ListItem[]> | undefined;
   exchangeRate: CurrencyExchangeRate | undefined;
 
   @HostListener('window:resize')
@@ -42,7 +42,9 @@ export class ExchangerComponent implements OnInit {
 
   ngOnInit() {
     this.basedCurrencyValue = 1;
-    this.$symbols = this.currencyExchangeService.getCurrencies();
+    this.currencies$ = this.currencyExchangeService
+      .getCurrencies()
+      .pipe(filter((x) => !!x));
     this.convertCurrencies();
   }
   switchCurrencies() {

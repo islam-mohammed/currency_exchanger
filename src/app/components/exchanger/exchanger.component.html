@@ -1,12 +1,15 @@
 <h1>{{ title }}</h1>
 <hr />
 <form>
-  <div class="exchanger">
+  <div
+    class="exchanger"
+    *ngIf="currencies$ | async as currencies; else loading"
+  >
     <ce-select
       label="From"
       class="grid-a"
       [showImage]="true"
-      [listItems]="($symbols | async) || []"
+      [listItems]="currencies"
       [value]="basedCurrency"
       [exclude]="convertCurrency"
       (itemSelect)="basedCurrency = $event"
@@ -24,7 +27,7 @@
       label="To"
       class="grid-c"
       [showImage]="true"
-      [listItems]="($symbols | async) || []"
+      [listItems]="currencies"
       [value]="convertCurrency"
       [exclude]="basedCurrency"
       (itemSelect)="convertCurrency = $event"
@@ -60,3 +63,7 @@
   [basedCurrency]="basedCurrency"
   [value]="basedCurrencyProp"
 ></ce-populer-currencies>
+
+<ng-template #loading>
+  <h2>Adding loader</h2>
+</ng-template>

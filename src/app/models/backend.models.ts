@@ -8,6 +8,6 @@ export interface ExchangeRateResponse {
 }
 
 export interface SymbolResponse {
-  success: boolean;
   currencies: { [key: string]: string };
+  success: boolean;
 }
