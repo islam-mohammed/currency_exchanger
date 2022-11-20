@@ -15,6 +15,7 @@ export class ExchangerComponent implements OnInit {
   basedCurrencyValue = 1;
   convertCurrency = 'USD';
   convertCurrencyValue = '';
+  convertRate: number | undefined;
   basedCurrencyProp: number | undefined;
 
   isDeskTop = true;
@@ -28,6 +29,10 @@ export class ExchangerComponent implements OnInit {
     if (screenWidth && screenWidth <= 768) {
       this.isDeskTop = false;
     }
+  }
+
+  get exchangeRateInfo() {
+    return `${this.convertRate}${this.convertCurrency}`;
   }
 
   constructor(
@@ -57,10 +62,12 @@ export class ExchangerComponent implements OnInit {
         .pipe(take(1))
         .subscribe((exchangeRate) => {
           this.exchangeRate = exchangeRate;
-          this.convertCurrencyValue = `${(
+          this.convertRate =
             exchangeRate.currencies[
               `${this.basedCurrency + this.convertCurrency}`
-            ] * this.basedCurrencyValue
+            ];
+          this.convertCurrencyValue = `${(
+            this.convertRate * this.basedCurrencyValue
           ).toFixed(4)} ${this.convertCurrency}`;
         });
     }

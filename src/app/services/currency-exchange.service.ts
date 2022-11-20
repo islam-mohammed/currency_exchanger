@@ -6,10 +6,7 @@ import {
 import { HttpErrorHandlingService } from './http-error-handleing.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  ExchangeRateResponse,
-  SymbolResponse,
-} from '@app/models/backend.models';
+import { ExchangeRateResponse } from '@app/models/backend.models';
 import { environment } from '../../environments/environment';
 import { catchError, Observable, map, of, shareReplay } from 'rxjs';
 
