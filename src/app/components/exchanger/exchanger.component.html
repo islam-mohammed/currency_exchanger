@@ -1,0 +1,58 @@
+<h1>{{ title }}</h1>
+<hr />
+<form>
+  <div class="exchanger">
+    <ce-select
+      label="From"
+      class="grid-a"
+      [showImage]="true"
+      [listItems]="($symbols | async) || []"
+      [value]="basedCurrency"
+      [exclude]="convertCurrency"
+      (itemSelect)="basedCurrency = $event"
+    ></ce-select>
+
+    <button class="exchanger-switch grid-b" (click)="switchCurrencies()">
+      <img
+        class="exchanger-switch--image"
+        src="assets/images/replace.svg"
+        alt="Switch Currencies"
+      />
+    </button>
+
+    <ce-select
+      label="To"
+      class="grid-c"
+      [showImage]="true"
+      [listItems]="($symbols | async) || []"
+      [value]="convertCurrency"
+      [exclude]="basedCurrency"
+      (itemSelect)="convertCurrency = $event"
+    ></ce-select>
+
+    <ce-text
+      class="grid-d"
+      type="number"
+      name="from"
+      [(ngModel)]="basedCurrencyValue"
+    ></ce-text>
+
+    <button class="exchanger-convert grid-e" (click)="convertCurrencies()">
+      Convert
+    </button>
+
+    <ce-text
+      class="grid-f"
+      type="text"
+      name="to"
+      [disabled]="true"
+      [(ngModel)]="convertCurrencyValue"
+    ></ce-text>
+  </div>
+</form>
+
+<ce-populer-currencies
+  [exchangeRate]="exchangeRate"
+  [basedCurrency]="basedCurrency"
+  [value]="basedCurrencyProp"
+></ce-populer-currencies>

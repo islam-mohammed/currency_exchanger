@@ -1,3 +1,4 @@
+import { ExchangerModule } from './components/exchanger/exchanger.module';
 import { ApiInterceptorInterceptor } from './interceptors/api-interceptor.interceptor';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -7,14 +8,14 @@ import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { HeaderComponent } from './components/header/header.component';
-import { ExchangerComponent } from './components/exchanger/exchanger.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, ExchangerComponent],
+  declarations: [AppComponent, HeaderComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    ExchangerModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),
   ],
