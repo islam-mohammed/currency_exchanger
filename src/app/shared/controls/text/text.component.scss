@@ -1,0 +1,30 @@
+@import "../../../../assets/responsive.mixin.scss";
+:host {
+  width: 100%;
+  max-width: 450px;
+}
+.text {
+  &-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+  }
+  &-input {
+    display: block;
+    padding: 0.625rem;
+    background-color: var(--light);
+    color: var(--light-contrast);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    width: 100%;
+    border-radius: 0.5rem;
+    border-width: 1px;
+    border-color: var(--light-shade);
+    &:focus {
+      outline: none;
+    }
+  }
+}

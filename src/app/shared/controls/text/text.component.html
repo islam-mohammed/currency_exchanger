@@ -1,0 +1,14 @@
+<div class="text form-group">
+  <label *ngIf="label" [for]="id" class="text-label">{{ label }}</label>
+  <input
+    type="text"
+    [id]="id"
+    class="text-input form-control"
+    [placeholder]="placeholder"
+    [value]="value"
+    [attr.required]="required"
+    [disabled]="disabled"
+    (keydown)="validateInput($event)"
+    (input)="onInput($event)"
+  />
+</div>
