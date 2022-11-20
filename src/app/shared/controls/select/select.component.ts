@@ -22,6 +22,7 @@ export class SelectComponent implements OnInit {
     }
   }
   @Input() showImage = false;
+  @Input() showValueOnly = false;
   @Input() label: string = '';
   @Input() listItems: ListItem[] = [];
   @Input() set value(value: string) {

@@ -14,11 +14,11 @@
         <img
           *ngIf="selectedItem.imageUrl && showImage"
           src="{{ selectedItem.imageUrl }}"
-          alt=""
           class="select-control--container_content-img"
+          onerror="this.style.display = 'none'"
         />
         <span class="select-control--container_content-text">{{
-          selectedItem.text || selectedItem.value
+          (selectedItem.text && showValueOnly) || selectedItem.value
         }}</span>
       </div>
 
@@ -56,8 +56,9 @@
             *ngIf="item.imageUrl && showImage"
             [src]="item.imageUrl"
             [alt]="item.text || item.value"
+            onerror="this.style.display = 'none'"
           />
-          <span>{{ item.text || item.value }}</span>
+          <span> {{ (item.text && showValueOnly) || item.value }}</span>
         </div>
         <span
           class="select-control--list_item-check"
