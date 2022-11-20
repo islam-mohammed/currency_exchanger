@@ -24,16 +24,23 @@ export class SelectComponent implements OnInit {
   @Input() showImage = false;
   @Input() label: string = '';
   @Input() listItems: ListItem[] = [];
-  @Input() value = '';
+  @Input() set value(value: string) {
+    this.selectedItem = this.findItemByValue(value.toUpperCase());
+  }
+  @Input() set exclude(value: string) {
+    this.localListItems = [
+      ...this.listItems.filter((item) => item.value !== value.toUpperCase()),
+    ];
+  }
+
   @Output() itemSelect = new EventEmitter<string>();
   selectedItem: ListItem | undefined = undefined;
   showDropDown = false;
+  localListItems: ListItem[] = [];
 
   constructor(private eRef: ElementRef) {}
   ngOnInit(): void {
-    if (this.value) {
-      this.selectedItem = this.findItemByValue(this.value);
-    }
+    this.localListItems = [...this.listItems];
   }
 
   itemTrackBy(index: number, item: ListItem) {
@@ -43,8 +50,7 @@ export class SelectComponent implements OnInit {
   onItemSelect(value: string) {
     this.itemSelect.emit(value);
     this.showDropDown = false;
-    this.selectedItem = this.findItemByValue(value);
-    console.log(this.selectedItem);
+    this.selectedItem = this.findItemByValue(value.toUpperCase());
   }
   findItemByValue(value: string) {
     return (

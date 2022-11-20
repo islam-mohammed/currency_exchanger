@@ -39,17 +39,17 @@
       </button>
     </div>
     <ul
-      class="select-control--container_list"
+      class="select-control--list"
       id="options"
       role="listbox"
       [hidden]="!showDropDown"
     >
       <li
-        class="select-control--container_item"
+        class="select-control--list_item"
         id="option-0"
         role="option"
         tabindex="-1"
-        *ngFor="let item of listItems; trackBy: itemTrackBy"
+        *ngFor="let item of localListItems; trackBy: itemTrackBy"
         (click)="onItemSelect(item.value)"
       >
         <div>
@@ -61,6 +61,7 @@
           <span>{{ item.text || item.value }}</span>
         </div>
         <span
+          class="select-control--list_item-check"
           [class.checked]="item.value === selectedItem?.value"
           [class.unchecked]="item.value !== selectedItem?.value"
         >
