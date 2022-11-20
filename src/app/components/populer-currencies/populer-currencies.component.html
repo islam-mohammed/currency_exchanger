@@ -1,0 +1,28 @@
+<div class="populer">
+  <h2 class="populer-title">Populer Currencies Against {{ basedCurrency }}</h2>
+  <ul role="list" class="populer-list">
+    <li
+      class="populer-list--item"
+      *ngFor="let item of exchangeRate?.currencies | keyvalue"
+    >
+      <ng-container
+        *ngIf="{
+          key: item.key | symbole,
+          value: item?.value | number: '0.1-4'
+        } as currency"
+      >
+        <div class="populer-list--item_symbole">
+          {{ currency.key }}
+        </div>
+        <div class="populer-list--item_value">
+          <div>
+            <span>{{ getExchangeRate(currency) }}</span>
+            <p>
+              1 {{ basedCurrency }} = {{ currency.value }}{{ currency.key }}
+            </p>
+          </div>
+        </div>
+      </ng-container>
+    </li>
+  </ul>
+</div>
