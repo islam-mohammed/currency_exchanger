@@ -1,3 +1,4 @@
+import { ConvertEventArgs } from './../../models/frontend-models';
 import { Component, Input } from '@angular/core';
 import { CurrencyExchangeRate } from '@app/models/frontend-models';
 
@@ -7,13 +8,11 @@ import { CurrencyExchangeRate } from '@app/models/frontend-models';
   styleUrls: ['./populer-currencies.component.scss'],
 })
 export class PopulerCurrenciesComponent {
-  @Input() exchangeRate: CurrencyExchangeRate | undefined;
-  @Input() basedCurrency: string | undefined;
-  @Input() value: number | undefined;
+  @Input() convertData: ConvertEventArgs | undefined;
 
   getExchangeRate(exhcangeRate: { key: string; value: string | null }) {
-    if (this.value) {
-      return (this.value * +exhcangeRate.value!).toFixed(4);
+    if (this.convertData?.convertValue) {
+      return (this.convertData?.convertValue * +exhcangeRate.value!).toFixed(4);
     }
     return `00.0 ${exhcangeRate.key}`;
   }

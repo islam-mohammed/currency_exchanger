@@ -1,10 +1,12 @@
 <div class="populer">
-  <h2 class="populer-title">Populer Currencies Against {{ basedCurrency }}</h2>
+  <h2 class="populer-title">
+    Populer Currencies Against {{ convertData?.basedCurrency }}
+  </h2>
   <hr />
   <ul role="list" class="populer-list">
     <li
       class="populer-list--item"
-      *ngFor="let item of exchangeRate?.currencies | keyvalue"
+      *ngFor="let item of convertData?.exchangeRate?.currencies | keyvalue"
     >
       <ng-container
         *ngIf="{
@@ -19,7 +21,8 @@
           <div>
             <span>{{ getExchangeRate(currency) }}</span>
             <p>
-              1 {{ basedCurrency }} = {{ currency.value }}{{ currency.key }}
+              1 {{ convertData?.basedCurrency }} = {{ currency.value
+              }}{{ currency.key }}
             </p>
           </div>
         </div>

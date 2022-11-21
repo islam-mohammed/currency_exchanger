@@ -13,3 +13,9 @@ export interface CurrencyExchangeRate {
 export interface CurrencyExchangeRates {
   [key: string]: CurrencyExchangeRate;
 }
+
+export interface ConvertEventArgs {
+  exchangeRate: CurrencyExchangeRate;
+  basedCurrency: string;
+  convertValue: number;
+}
