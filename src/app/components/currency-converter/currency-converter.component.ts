@@ -39,13 +39,6 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
   @Input() title: string = '';
   @Input() isCurrencySelectDisabled = false;
   @Output() convert = new EventEmitter<ConvertEventArgs>();
-  @HostListener('window:resize')
-  onWindowResize() {
-    const screenWidth = this.windowService.window?.innerWidth;
-    if (screenWidth && screenWidth <= 768) {
-      this.isDeskTop = false;
-    }
-  }
 
   get exchangeRateInfo() {
     return `${this.convertRate}${this.convertCurrency}`;
@@ -119,6 +112,7 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
           this.convert.emit({
             basedCurrency: this.basedCurrency,
             basedCurrencyName: this.basedCurrencyText,
+            convetCurrency: this.convertCurrency,
             convertValue: this.basedCurrencyProp || 0,
             exchangeRate: this.exchangeRate,
           });

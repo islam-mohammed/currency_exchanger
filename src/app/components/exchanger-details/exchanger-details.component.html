@@ -1,11 +1,32 @@
 <div class="exchanger">
   <h1>
-    {{ convertData?.basedCurrency }} - {{ convertData?.basedCurrencyName }}
+    {{ title }}
   </h1>
   <button class="exchanger-home" (click)="backToHome()">Back to Home</button>
 </div>
 <hr />
 <ce-currency-converter
-  (convert)="convertData = $event"
+  (convert)="onConvert($event)"
   [isCurrencySelectDisabled]="true"
 ></ce-currency-converter>
+<div style="height: 500px">
+  <ngx-charts-bar-vertical
+    [results]="history$ | async"
+    [xAxis]="true"
+    [yAxis]="true"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [rotateXAxisTicks]="true"
+    [roundEdges]="true"
+    [showXAxisLabel]="true"
+    xAxisLabel="Months"
+    [showYAxisLabel]="true"
+    yAxisLabel="Rate"
+    [view]="chartView"
+  >
+  </ngx-charts-bar-vertical>
+</div>
+
+<ng-template #loading>
+  <h4>Loading...</h4>
+</ng-template>

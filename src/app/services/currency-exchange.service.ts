@@ -2,6 +2,7 @@ import {
   CurrencyExchangeRate,
   CurrencyExchangeRates,
   ExchangeDetailsParams,
+  ChartBar,
   ListItem,
 } from '@app/models/frontend-models';
 import { HttpErrorHandlingService } from './http-error-handleing.service';
@@ -9,6 +10,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   ExchangeRateResponse,
+  HistoryDataResponse,
   SymbolResponse,
 } from '@app/models/backend.models';
 import { environment } from '../../environments/environment';
@@ -18,7 +20,6 @@ import {
   map,
   of,
   shareReplay,
-  Subject,
   BehaviorSubject,
 } from 'rxjs';
 
@@ -63,7 +64,6 @@ export class CurrencyExchangeService {
       catchError(this.errorHandler.handleError)
     );
   }
-
   getCurrencyExchangeRates(
     from: string,
     to: string
@@ -93,6 +93,40 @@ export class CurrencyExchangeService {
       );
   }
 
+  getHistoryData(from: string, to: string): Observable<ChartBar[]> {
+    let chartBarDate: ChartBar[] = [];
+    const dt = new Date();
+    const endDate = dt.toISOString().split('T')[0];
+    dt.setMonth(dt.getMonth() - 12);
+    const startDate = dt.toISOString().split('T')[0];
+
+    const lastDaysInBetween = this.lastDaysInBetween(endDate);
+
+    const params = new HttpParams()
+      .set('start_date', startDate)
+      .set('end_date', endDate)
+      .set('source', from)
+      .set('currencies', to);
+
+    return this.http
+      .get<HistoryDataResponse>(`${environment.api_url}/timeframe`, { params })
+      .pipe(
+        map((history) => {
+          return lastDaysInBetween.map((date) => {
+            const name = new Date(date).toLocaleString('default', {
+              month: 'long',
+            });
+            const value: number = history.quotes[date][`${from + to}`];
+            return {
+              name,
+              value,
+            };
+          });
+        }),
+        catchError(this.errorHandler.handleError)
+      );
+  }
+
   getCurrencyName(currency: string) {
     return this._currencies.find((cur) => cur.value === currency)?.text;
   }
@@ -107,5 +141,18 @@ export class CurrencyExchangeService {
       return true;
     }
     return false;
+  }
+
+  private lastDaysInBetween(toDate: string) {
+    const arr = [toDate];
+    const dt = new Date();
+    dt.setDate(1);
+    for (let i = 0; i <= 10; i++) {
+      arr.push(
+        new Date(dt.getFullYear(), dt.getMonth(), 1).toISOString().split('T')[0]
+      );
+      dt.setMonth(dt.getMonth() - 1);
+    }
+    return arr.reverse();
   }
 }

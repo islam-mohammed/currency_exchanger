@@ -1,4 +1,4 @@
-import { ConvertEventArgs } from './../../models/frontend-models';
+import { ConvertEventArgs } from '@app/models/frontend-models';
 import { Component, Input } from '@angular/core';
 
 @Component({

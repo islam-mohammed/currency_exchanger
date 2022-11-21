@@ -18,6 +18,7 @@ export interface ConvertEventArgs {
   exchangeRate: CurrencyExchangeRate;
   basedCurrency: string;
   basedCurrencyName: string;
+  convetCurrency: string;
   convertValue: number;
 }
 
@@ -29,4 +30,9 @@ export interface ExchangeDetailsParams {
   basedCurrency: string;
   convertCurrency: string;
   amount: number;
+}
+
+export interface ChartBar {
+  name: string;
+  value: number;
 }
