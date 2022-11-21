@@ -1,5 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../src/assets/responsive.mixin.scss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 :root {
   --primary: #264653;
   --primary-contrast: #ffffff;

@@ -67,12 +67,14 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
 
   initObservers() {
     this.detailsParamsChangeSubscription =
-      this.currencyExchangeService.detailsParmsChanged.subscribe((params) => {
-        this.basedCurrencyValue = params.amount;
-        this.basedCurrency = params.basedCurrency;
-        this.convertCurrency = params.convertCurrency;
-        this.convertCurrencies();
-      });
+      this.currencyExchangeService.detailsParmsChanged
+        .pipe(filter((params) => !!params.amount))
+        .subscribe((params) => {
+          this.basedCurrencyValue = params.amount;
+          this.basedCurrency = params.basedCurrency;
+          this.convertCurrency = params.convertCurrency;
+          this.convertCurrencies();
+        });
 
     this.currencies$ = this.currencyExchangeService
       .getCurrencies()
