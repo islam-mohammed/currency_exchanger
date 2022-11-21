@@ -1,4 +1,4 @@
-import { ListItem } from './../../../models/frontend-models';
+import { ListItem, SelectEventArgs } from '@app/models/frontend-models';
 import {
   Component,
   ElementRef,
@@ -34,8 +34,9 @@ export class SelectComponent implements OnInit, OnChanges {
   @Input() listItems: ListItem[] = [];
   @Input() value = '';
   @Input() exclude = '';
+  @Input() isDisabled = false;
 
-  @Output() itemSelect = new EventEmitter<string>();
+  @Output() itemSelect = new EventEmitter<SelectEventArgs>();
 
   constructor(private eRef: ElementRef) {}
 
@@ -52,7 +53,6 @@ export class SelectComponent implements OnInit, OnChanges {
       ...this.listItems.filter((item) => item.value !== this.exclude),
     ];
     this.selectedItem = this.findItemByValue(this.value);
-    console.log(this.selectedItem);
     this.initilaized = true;
   }
 
@@ -60,12 +60,15 @@ export class SelectComponent implements OnInit, OnChanges {
     return item.value;
   }
 
-  onItemSelect(value: string) {
-    this.itemSelect.emit(value);
+  onItemSelect(selectData: SelectEventArgs) {
+    this.itemSelect.emit(selectData);
     this.showDropDown = false;
-    this.selectedItem = this.findItemByValue(value);
+    this.selectedItem = this.findItemByValue(selectData.value);
   }
   findItemByValue(value: string) {
     return this.listItems.find((item) => item.value === value);
+  }
+  toggleDropdown() {
+    if (!this.isDisabled) this.showDropDown = !this.showDropDown;
   }
 }

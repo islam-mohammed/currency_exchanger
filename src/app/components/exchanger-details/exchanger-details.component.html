@@ -1,0 +1,11 @@
+<div class="exchanger">
+  <h1>
+    {{ convertData?.basedCurrency }} - {{ convertData?.basedCurrencyName }}
+  </h1>
+  <button class="exchanger-home" (click)="backToHome()">Back to Home</button>
+</div>
+<hr />
+<ce-currency-converter
+  (convert)="convertData = $event"
+  [isCurrencySelectDisabled]="true"
+></ce-currency-converter>

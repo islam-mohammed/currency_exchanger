@@ -8,7 +8,7 @@
       role="combobox"
       aria-controls="options"
       aria-expanded="false"
-      (click)="showDropDown = !showDropDown"
+      (click)="toggleDropdown()"
     >
       <div *ngIf="selectedItem" class="select-control--container_content">
         <img
@@ -22,7 +22,7 @@
         }}</span>
       </div>
 
-      <button type="button">
+      <button type="button" *ngIf="!isDisabled">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
@@ -49,7 +49,7 @@
         role="option"
         tabindex="-1"
         *ngFor="let item of localListItems; trackBy: itemTrackBy"
-        (click)="onItemSelect(item.value)"
+        (click)="onItemSelect({ value: item.value!, text: item.text! })"
       >
         <div>
           <img

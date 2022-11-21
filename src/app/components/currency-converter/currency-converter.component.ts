@@ -1,8 +1,10 @@
+import { SelectEventArgs } from './../../models/frontend-models';
 import {
   Component,
   EventEmitter,
   HostListener,
   Input,
+  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
@@ -14,26 +16,28 @@ import {
 } from '@app/models/frontend-models';
 import { CurrencyExchangeService } from '@app/services/currency-exchange.service';
 import { WindowService } from '@app/services/window.service';
-import { filter, Observable, take } from 'rxjs';
+import { filter, Observable, Subscription, take } from 'rxjs';
 
 @Component({
   selector: 'ce-currency-converter',
   templateUrl: './currency-converter.component.html',
   styleUrls: ['./currency-converter.component.scss'],
 })
-export class CurrencyConverterComponent implements OnInit {
+export class CurrencyConverterComponent implements OnInit, OnDestroy {
   basedCurrency = 'EUR';
+  basedCurrencyText = 'Euro';
   basedCurrencyValue = 1;
   convertCurrency = 'USD';
   convertCurrencyValue = '';
   convertRate: number | undefined;
   basedCurrencyProp: number | undefined;
-
   isDeskTop = true;
-
   currencies$: Observable<ListItem[]> | undefined;
   exchangeRate: CurrencyExchangeRate | undefined;
+  detailsParamsChangeSubscription: Subscription;
+
   @Input() title: string = '';
+  @Input() isCurrencySelectDisabled = false;
   @Output() convert = new EventEmitter<ConvertEventArgs>();
   @HostListener('window:resize')
   onWindowResize() {
@@ -54,16 +58,42 @@ export class CurrencyConverterComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.basedCurrencyValue = 1;
+    this.initObservers();
+  }
+
+  ngOnDestroy(): void {
+    this.detailsParamsChangeSubscription.unsubscribe();
+  }
+
+  initObservers() {
+    this.detailsParamsChangeSubscription =
+      this.currencyExchangeService.detailsParmsChanged.subscribe((params) => {
+        this.basedCurrencyValue = params.amount;
+        this.basedCurrency = params.basedCurrency;
+        this.convertCurrency = params.convertCurrency;
+        this.convertCurrencies();
+      });
+
     this.currencies$ = this.currencyExchangeService
       .getCurrencies()
       .pipe(filter((x) => !!x));
     this.convertCurrencies();
   }
+  onBasedCurrencySelect(event: SelectEventArgs) {
+    this.basedCurrencyText = event.text;
+    this.basedCurrency = event.value;
+  }
+  onConvertCurrencySelect(event: SelectEventArgs) {
+    this.convertCurrency = event.value;
+  }
+
   switchCurrencies() {
     const base = this.basedCurrency;
     this.basedCurrency = this.convertCurrency;
     this.convertCurrency = base;
+    this.basedCurrencyText = this.currencyExchangeService.getCurrencyName(
+      this.basedCurrency
+    )!;
     this.convertCurrencies();
   }
 
@@ -86,6 +116,7 @@ export class CurrencyConverterComponent implements OnInit {
           ).toFixed(4)} ${this.convertCurrency}`;
           this.convert.emit({
             basedCurrency: this.basedCurrency,
+            basedCurrencyName: this.basedCurrencyText,
             convertValue: this.basedCurrencyProp || 0,
             exchangeRate: this.exchangeRate,
           });
@@ -98,6 +129,7 @@ export class CurrencyConverterComponent implements OnInit {
       queryParams: {
         from: this.basedCurrency,
         to: this.convertCurrency,
+        amount: this.basedCurrencyValue,
       },
     });
   }

@@ -1,6 +1,7 @@
 import {
   CurrencyExchangeRate,
   CurrencyExchangeRates,
+  ExchangeDetailsParams,
   ListItem,
 } from '@app/models/frontend-models';
 import { HttpErrorHandlingService } from './http-error-handleing.service';
@@ -11,7 +12,15 @@ import {
   SymbolResponse,
 } from '@app/models/backend.models';
 import { environment } from '../../environments/environment';
-import { catchError, Observable, map, of, shareReplay } from 'rxjs';
+import {
+  catchError,
+  Observable,
+  map,
+  of,
+  shareReplay,
+  Subject,
+  BehaviorSubject,
+} from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CurrencyExchangeService {
@@ -22,7 +31,18 @@ export class CurrencyExchangeService {
     private errorHandler: HttpErrorHandlingService
   ) {}
   private _currencies: ListItem[] = [];
+
   private _currencyExchangeRate: CurrencyExchangeRates = {};
+
+  private _detailsParamChanged = new BehaviorSubject<ExchangeDetailsParams>({
+    amount: 0,
+    basedCurrency: '',
+    convertCurrency: '',
+  });
+
+  get detailsParmsChanged() {
+    return this._detailsParamChanged.asObservable();
+  }
 
   getCurrencies(): Observable<ListItem[]> {
     const currencies: ListItem[] = [];
@@ -71,6 +91,14 @@ export class CurrencyExchangeService {
         }),
         catchError(this.errorHandler.handleError)
       );
+  }
+
+  getCurrencyName(currency: string) {
+    return this._currencies.find((cur) => cur.value === currency)?.text;
+  }
+
+  setDetailsParams(value: ExchangeDetailsParams) {
+    this._detailsParamChanged.next(value);
   }
 
   private isFetched(from: string, to: string): boolean {

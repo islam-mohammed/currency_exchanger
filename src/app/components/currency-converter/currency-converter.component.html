@@ -4,9 +4,10 @@
     class="grid-a"
     [showImage]="true"
     [listItems]="currencies"
+    [isDisabled]="isCurrencySelectDisabled"
     [value]="basedCurrency"
     [exclude]="convertCurrency"
-    (itemSelect)="basedCurrency = $event"
+    (itemSelect)="onBasedCurrencySelect($event)"
   ></ce-select>
 
   <button class="exchanger-switch grid-b" (click)="switchCurrencies()">
@@ -24,7 +25,7 @@
     [listItems]="currencies"
     [value]="convertCurrency"
     [exclude]="basedCurrency"
-    (itemSelect)="convertCurrency = $event"
+    (itemSelect)="onConvertCurrencySelect($event)"
   ></ce-select>
 
   <ce-text
@@ -49,7 +50,11 @@
   <div *ngIf="convertCurrencyValue" class="grid-g exchanger-info">
     1 {{ basedCurrency }} = {{ exchangeRateInfo }}
   </div>
-  <button class="exchanger-details grid-i" (click)="showDetails()">
+  <button
+    *ngIf="!isCurrencySelectDisabled"
+    class="exchanger-details grid-i"
+    (click)="showDetails()"
+  >
     More Details
   </button>
 </div>

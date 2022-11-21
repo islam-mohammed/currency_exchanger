@@ -17,5 +17,16 @@ export interface CurrencyExchangeRates {
 export interface ConvertEventArgs {
   exchangeRate: CurrencyExchangeRate;
   basedCurrency: string;
+  basedCurrencyName: string;
   convertValue: number;
+}
+
+export interface SelectEventArgs {
+  text: string;
+  value: string;
+}
+export interface ExchangeDetailsParams {
+  basedCurrency: string;
+  convertCurrency: string;
+  amount: number;
 }
