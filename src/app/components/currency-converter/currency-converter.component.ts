@@ -1,8 +1,7 @@
-import { SelectEventArgs } from './../../models/frontend-models';
+import { SelectEventArgs } from '@app/models/frontend-models';
 import {
   Component,
   EventEmitter,
-  HostListener,
   Input,
   OnDestroy,
   OnInit,

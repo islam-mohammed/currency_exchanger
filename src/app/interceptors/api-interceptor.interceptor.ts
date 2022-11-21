@@ -1,4 +1,4 @@
-import { environment } from './../../environments/environment.dev';
+import { environment } from '@environment/environment';
 import { Injectable } from '@angular/core';
 import {
   HttpRequest,

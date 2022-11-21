@@ -5,7 +5,7 @@ import {
   ChartBar,
   ListItem,
 } from '@app/models/frontend-models';
-import { CustomErrorHandler } from './custom-error-handler';
+import { CustomErrorHandler } from '@app/services/custom-error-handler';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
@@ -13,7 +13,7 @@ import {
   HistoryDataResponse,
   SymbolResponse,
 } from '@app/models/backend.models';
-import { environment } from '../../environments/environment';
+import { environment } from '@environment/environment';
 import {
   catchError,
   Observable,
@@ -94,7 +94,6 @@ export class CurrencyExchangeService {
   }
 
   getHistoryData(from: string, to: string): Observable<ChartBar[]> {
-    let chartBarDate: ChartBar[] = [];
     const dt = new Date();
     const endDate = dt.toISOString().split('T')[0];
     dt.setMonth(dt.getMonth() - 12);

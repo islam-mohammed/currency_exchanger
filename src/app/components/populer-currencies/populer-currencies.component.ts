@@ -1,6 +1,5 @@
-import { ConvertEventArgs } from './../../models/frontend-models';
+import { ConvertEventArgs } from '@app/models/frontend-models';
 import { Component, Input } from '@angular/core';
-import { CurrencyExchangeRate } from '@app/models/frontend-models';
 
 @Component({
   selector: 'ce-populer-currencies',

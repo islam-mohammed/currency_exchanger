@@ -1,7 +1,7 @@
 import {
   ConvertEventArgs,
   ExchangeDetailsParams,
-} from './../../models/frontend-models';
+} from '@app/models/frontend-models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
