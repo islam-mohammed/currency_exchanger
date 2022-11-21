@@ -5,7 +5,7 @@ import {
   ChartBar,
   ListItem,
 } from '@app/models/frontend-models';
-import { HttpErrorHandlingService } from './http-error-handleing.service';
+import { CustomErrorHandler } from './custom-error-handler';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
@@ -29,7 +29,7 @@ export class CurrencyExchangeService {
     environment.most_popular_currencies.split(',');
   constructor(
     private http: HttpClient,
-    private errorHandler: HttpErrorHandlingService
+    private errorHandler: CustomErrorHandler
   ) {}
   private _currencies: ListItem[] = [];
 
@@ -61,7 +61,7 @@ export class CurrencyExchangeService {
         this._currencies = currencies;
         return currencies;
       }),
-      catchError(this.errorHandler.handleError)
+      catchError(this.errorHandler.handleHttpError)
     );
   }
   getCurrencyExchangeRates(
@@ -89,7 +89,7 @@ export class CurrencyExchangeService {
           };
           return this._currencyExchangeRate[from];
         }),
-        catchError(this.errorHandler.handleError)
+        catchError(this.errorHandler.handleHttpError)
       );
   }
 
@@ -123,7 +123,7 @@ export class CurrencyExchangeService {
             };
           });
         }),
-        catchError(this.errorHandler.handleError)
+        catchError(this.errorHandler.handleHttpError)
       );
   }
 
