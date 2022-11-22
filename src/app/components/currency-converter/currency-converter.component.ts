@@ -23,10 +23,10 @@ import { filter, Observable, Subscription, take } from 'rxjs';
   styleUrls: ['./currency-converter.component.scss'],
 })
 export class CurrencyConverterComponent implements OnInit, OnDestroy {
-  basedCurrency = 'EUR';
-  basedCurrencyText = 'Euro';
+  basedCurrency = '';
   basedCurrencyValue = 1;
-  convertCurrency = 'USD';
+  basedCurrencyText = '';
+  convertCurrency = '';
   convertCurrencyValue = '';
   convertRate: number | undefined;
   basedCurrencyProp: number | undefined;
@@ -45,11 +45,15 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
 
   constructor(
     private currencyExchangeService: CurrencyExchangeService,
-    private windowService: WindowService,
     private router: Router
   ) {}
 
   ngOnInit() {
+    this.basedCurrency = 'EUR';
+    this.convertCurrency = 'USD';
+    this.basedCurrencyText = this.currencyExchangeService.getCurrencyName(
+      this.basedCurrency
+    )!;
     this.initObservers();
   }
 
@@ -73,14 +77,6 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
       .pipe(filter((x) => !!x));
     this.convertCurrencies();
   }
-  onBasedCurrencySelect(event: SelectEventArgs) {
-    this.basedCurrencyText = event.text;
-    this.basedCurrency = event.value;
-  }
-  onConvertCurrencySelect(event: SelectEventArgs) {
-    this.convertCurrency = event.value;
-  }
-
   switchCurrencies() {
     const base = this.basedCurrency;
     this.basedCurrency = this.convertCurrency;

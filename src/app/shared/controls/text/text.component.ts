@@ -21,33 +21,31 @@ export class TextComponent {
   @Input() required: boolean = false;
   @Input() placeholder: string = '';
   @Input() type: 'text' | 'email' | 'number' = 'text';
-  @Input() disabled: boolean = false;
 
-  private onTouchedCallback: Function = () => {};
-  private onChangeCallback: Function = () => {};
-
+  disabled = false;
+  touched = false;
   private innerValue = '';
 
+  private onTouchedCallback: Function = () => {};
+  private onChangeCallback: Function = (text: string) => {};
+
   constructor() {}
+
   get value(): string {
     return this.innerValue;
   }
   set value(v: string) {
     if (v !== this.innerValue) {
       this.innerValue = v;
-      this.onChangeCallback(v);
     }
   }
-
   onInput(element: Event) {
-    this.value = (<HTMLInputElement>element.target).value;
+    this.markAsTouched();
+    if (!this.disabled) {
+      this.innerValue = (<HTMLInputElement>element.target).value;
+      this.onChangeCallback(this.value);
+    }
   }
-
-  handleChange(value: string) {
-    this.onTouchedCallback();
-    this.onChangeCallback(value);
-  }
-
   public writeValue(value: string): void {
     if (value !== this.innerValue) {
       this.innerValue = value;
@@ -59,8 +57,16 @@ export class TextComponent {
   registerOnTouched(fn: any): void {
     this.onTouchedCallback = fn;
   }
-  setDisabledState?(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+
+  markAsTouched() {
+    if (!this.touched) {
+      this.onTouchedCallback();
+      this.touched = true;
+    }
+  }
+
+  setDisabledState(disabled: boolean) {
+    this.disabled = disabled;
   }
 
   validateInput(event: KeyboardEvent) {

@@ -9,9 +9,9 @@
   (convert)="onConvert($event)"
   [isCurrencySelectDisabled]="true"
 ></ce-currency-converter>
-<div style="height: 500px">
+<div class="chart-conatiner" *ngIf="history$ | async as history; else loading">
   <ngx-charts-bar-vertical
-    [results]="history$ | async"
+    [results]="history"
     [xAxis]="true"
     [yAxis]="true"
     [showXAxisLabel]="true"

@@ -1,10 +1,10 @@
-import { WindowService } from './../../services/window.service';
+import { WindowService } from '@app/services/window.service';
 import { CurrencyExchangeService } from '@app/services/currency-exchange.service';
 import { ExchangeDetailsParams, ChartBar } from '@app/models/frontend-models';
 import { Router } from '@angular/router';
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { ConvertEventArgs } from '@app/models/frontend-models';
-import { take, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'ce-exchanger-details',

@@ -2,12 +2,12 @@
   <ce-select
     label="From"
     class="grid-a"
+    name="basedCurrency"
     [showImage]="true"
     [listItems]="currencies"
-    [isDisabled]="isCurrencySelectDisabled"
-    [value]="basedCurrency"
+    [disabled]="isCurrencySelectDisabled"
+    [(ngModel)]="basedCurrency"
     [exclude]="convertCurrency"
-    (itemSelect)="onBasedCurrencySelect($event)"
   ></ce-select>
 
   <button class="exchanger-switch grid-b" (click)="switchCurrencies()">
@@ -21,11 +21,11 @@
   <ce-select
     label="To"
     class="grid-c"
+    name="covnertCurrency"
     [showImage]="true"
     [listItems]="currencies"
-    [value]="convertCurrency"
+    [(ngModel)]="convertCurrency"
     [exclude]="basedCurrency"
-    (itemSelect)="onConvertCurrencySelect($event)"
   ></ce-select>
 
   <ce-text
