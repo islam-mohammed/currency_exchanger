@@ -18,3 +18,8 @@ Run `npm run build:prod ` to build the project in production mode. The build art
 ## Running Linting
 
 Run `npm run lint` to execute linting.
+
+## Next Update:
+
+- 👀 Fix a a title bug in the Reactive Form (add-reactive-form) branch and merge it to the master.
+- 👀 Add a loader skeleton.
