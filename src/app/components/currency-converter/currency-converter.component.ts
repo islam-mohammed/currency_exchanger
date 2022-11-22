@@ -16,6 +16,7 @@ import {
 import { CurrencyExchangeService } from '@app/services/currency-exchange.service';
 import { WindowService } from '@app/services/window.service';
 import { filter, Observable, Subscription, take } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'ce-currency-converter',
@@ -23,13 +24,8 @@ import { filter, Observable, Subscription, take } from 'rxjs';
   styleUrls: ['./currency-converter.component.scss'],
 })
 export class CurrencyConverterComponent implements OnInit, OnDestroy {
-  basedCurrency = '';
-  basedCurrencyValue = 1;
   basedCurrencyText = '';
-  convertCurrency = '';
-  convertCurrencyValue = '';
   convertRate: number | undefined;
-  basedCurrencyProp: number | undefined;
   isDeskTop = true;
   currencies$: Observable<ListItem[]> | undefined;
   exchangeRate: CurrencyExchangeRate | undefined;
@@ -39,26 +35,47 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
   @Input() isCurrencySelectDisabled = false;
   @Output() convert = new EventEmitter<ConvertEventArgs>();
 
+  exchangeForm: FormGroup;
+
   get exchangeRateInfo() {
-    return `${this.convertRate}${this.convertCurrency}`;
+    return `${this.convertRate}${
+      this.exchangeForm.get('convertCurrency')?.value
+    }`;
+  }
+
+  get basedCurrency() {
+    return this.exchangeForm.get('basedCurrency')?.value;
+  }
+
+  get convertCurrency() {
+    return this.exchangeForm.get('convertCurrency')?.value;
+  }
+
+  get amountToConvert() {
+    return +this.exchangeForm.get('amountToConvert')?.value;
   }
 
   constructor(
     private currencyExchangeService: CurrencyExchangeService,
+    private fb: FormBuilder,
     private router: Router
   ) {}
 
   ngOnInit() {
-    this.basedCurrency = 'EUR';
-    this.convertCurrency = 'USD';
-    this.basedCurrencyText = this.currencyExchangeService.getCurrencyName(
-      this.basedCurrency
-    )!;
+    this.initForm();
     this.initObservers();
   }
 
   ngOnDestroy(): void {
     this.detailsParamsChangeSubscription.unsubscribe();
+  }
+  initForm() {
+    this.exchangeForm = this.fb.group({
+      basedCurrency: ['EUR'],
+      convertCurrency: ['USD'],
+      amountToConvert: ['1', Validators.required],
+      convertedAmount: [''],
+    });
   }
 
   initObservers() {
@@ -66,32 +83,32 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
       this.currencyExchangeService.detailsParmsChanged
         .pipe(filter((params) => !!params.amount))
         .subscribe((params) => {
-          this.basedCurrencyValue = params.amount;
-          this.basedCurrency = params.basedCurrency;
-          this.convertCurrency = params.convertCurrency;
+          this.exchangeForm.patchValue({
+            basedCurrency: params.basedCurrency,
+            convertCurrency: params.convertCurrency,
+            amountToConvert: params.amount,
+          });
           this.convertCurrencies();
         });
 
     this.currencies$ = this.currencyExchangeService
       .getCurrencies()
-      .pipe(filter((x) => !!x));
+      .pipe(filter((currencies) => currencies.length > 0));
     this.convertCurrencies();
   }
   switchCurrencies() {
-    const base = this.basedCurrency;
-    this.basedCurrency = this.convertCurrency;
-    this.convertCurrency = base;
-    this.basedCurrencyText = this.currencyExchangeService.getCurrencyName(
-      this.basedCurrency
-    )!;
+    const convert = this.exchangeForm.get('convertCurrency')?.value;
+    this.exchangeForm.patchValue({
+      basedCurrency: this.convertCurrency,
+      convertCurrency: this.basedCurrency,
+    });
+    this.basedCurrencyText =
+      this.currencyExchangeService.getCurrencyName(convert)!;
     this.convertCurrencies();
   }
 
   convertCurrencies() {
-    this.basedCurrencyProp = this.basedCurrencyValue;
-    if (!this.basedCurrencyValue) {
-      this.convertCurrencyValue = `0.00`;
-    } else {
+    if (this.exchangeForm.valid) {
       this.currencyExchangeService
         .getCurrencyExchangeRates(this.basedCurrency, this.convertCurrency)
         .pipe(take(1))
@@ -101,14 +118,16 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
             exchangeRate.currencies[
               `${this.basedCurrency + this.convertCurrency}`
             ];
-          this.convertCurrencyValue = `${(
-            this.convertRate * this.basedCurrencyValue
-          ).toFixed(4)} ${this.convertCurrency}`;
+          this.exchangeForm.patchValue({
+            convertedAmount: `${(
+              this.convertRate * this.amountToConvert
+            ).toFixed(4)} ${this.convertCurrency}`,
+          });
           this.convert.emit({
             basedCurrency: this.basedCurrency,
             basedCurrencyName: this.basedCurrencyText,
             convetCurrency: this.convertCurrency,
-            convertValue: this.basedCurrencyProp || 0,
+            convertValue: this.amountToConvert,
             exchangeRate: this.exchangeRate,
           });
         });
@@ -120,7 +139,7 @@ export class CurrencyConverterComponent implements OnInit, OnDestroy {
       queryParams: {
         from: this.basedCurrency,
         to: this.convertCurrency,
-        amount: this.basedCurrencyValue,
+        amount: this.amountToConvert,
       },
     });
   }

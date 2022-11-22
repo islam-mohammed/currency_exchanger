@@ -1,63 +1,68 @@
-<div class="exchanger" *ngIf="currencies$ | async as currencies; else loading">
-  <ce-select
-    label="From"
-    class="grid-a"
-    name="basedCurrency"
-    [showImage]="true"
-    [listItems]="currencies"
-    [disabled]="isCurrencySelectDisabled"
-    [(ngModel)]="basedCurrency"
-    [exclude]="convertCurrency"
-  ></ce-select>
-
-  <button class="exchanger-switch grid-b" (click)="switchCurrencies()">
-    <img
-      class="exchanger-switch--image"
-      src="assets/images/replace.svg"
-      alt="Switch Currencies"
-    />
-  </button>
-
-  <ce-select
-    label="To"
-    class="grid-c"
-    name="covnertCurrency"
-    [showImage]="true"
-    [listItems]="currencies"
-    [(ngModel)]="convertCurrency"
-    [exclude]="basedCurrency"
-  ></ce-select>
-
-  <ce-text
-    class="grid-d"
-    type="number"
-    name="from"
-    [(ngModel)]="basedCurrencyValue"
-  ></ce-text>
-
-  <button class="exchanger-convert grid-e" (click)="convertCurrencies()">
-    Convert
-  </button>
-
-  <ce-text
-    class="grid-f"
-    type="text"
-    name="to"
-    [disabled]="true"
-    [(ngModel)]="convertCurrencyValue"
-  ></ce-text>
-
-  <div *ngIf="convertCurrencyValue" class="grid-g exchanger-info">
-    1 {{ basedCurrency }} = {{ exchangeRateInfo }}
-  </div>
-  <button
-    *ngIf="!isCurrencySelectDisabled"
-    class="exchanger-details grid-i"
-    (click)="showDetails()"
+<form [formGroup]="exchangeForm" (ngSubmit)="convertCurrencies()">
+  <div
+    class="exchanger"
+    *ngIf="currencies$ | async as currencies; else loading"
   >
-    More Details
-  </button>
-</div>
+    <ce-select
+      label="From"
+      class="grid-a"
+      formControlName="basedCurrency"
+      [showImage]="true"
+      [listItems]="currencies"
+      [disabled]="isCurrencySelectDisabled"
+      [exclude]="convertCurrency"
+    ></ce-select>
+
+    <button class="exchanger-switch grid-b" (click)="switchCurrencies()">
+      <img
+        class="exchanger-switch--image"
+        src="assets/images/replace.svg"
+        alt="Switch Currencies"
+      />
+    </button>
+
+    <ce-select
+      label="To"
+      class="grid-c"
+      formControlName="convertCurrency"
+      [showImage]="true"
+      [listItems]="currencies"
+      [exclude]="basedCurrency"
+    ></ce-select>
+
+    <ce-text
+      class="grid-d"
+      type="number"
+      formControlName="amountToConvert"
+    ></ce-text>
+
+    <button
+      type="submit"
+      class="exchanger-convert grid-e"
+      [disabled]="!exchangeForm.valid"
+    >
+      Convert
+    </button>
+
+    <ce-text
+      class="grid-f"
+      type="text"
+      [disabled]="true"
+      formControlName="convertedAmount"
+    ></ce-text>
+
+    <div class="grid-g exchanger-info">
+      1 {{ basedCurrency }} = {{ exchangeRateInfo }}
+    </div>
+    <button
+      *ngIf="!isCurrencySelectDisabled"
+      class="exchanger-details grid-i"
+      (click)="showDetails()"
+    >
+      More Details
+    </button>
+  </div>
+</form>
 <ng-template #loading>
   <h2>Adding loader</h2>
 </ng-template>
